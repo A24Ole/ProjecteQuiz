@@ -1,9 +1,9 @@
-const application = document.getElementById("partida"); 
-const app = application; 
+const app = document.getElementById("partida");
 
 let questions = [];
 let userAnswers = {};
 let currentQuestionIndex = 0;
+let startTime, timerInterval;
 
 // Inicializar la app
 function init() {
@@ -38,16 +38,15 @@ function showForm() {
 
 // Pantalla inicial con saludo, botón para empezar y borrar nombre
 function renderStart(name) {
-  application.innerHTML = `
+  app.innerHTML = `
     <h2>Hola, ${name}!</h2>
     <h2>Bienvenido al Quiz</h2>
     <p>Para comenzar el quiz, pulsa el botón "Comenzar".</p>
     <button id="buttonStart">Comenzar</button>
-    <button id="clearNameBtn">Esborrar nom</button>
+    <button id="clearNameBtn">Borrar nombre</button>
   `;
 
   document.getElementById("buttonStart").addEventListener("click", () => {
-    console.log("Comenzar pulsado");
     loadQuestions();
   });
 
@@ -57,14 +56,11 @@ function renderStart(name) {
   });
 }
 
-
 // Carga las preguntas desde backend
 async function loadQuestions() {
-  console.log("Iniciando carga de preguntas...");
   try {
     const resp = await fetch('http://a24oleproyat.daw.inspedralbes.cat/projecteProdProva/src/php/quiz.php?action=load');
     const data = await resp.json();
-    console.log("Datos recibidos del backend:", data);
 
     if (!data.questions || !Array.isArray(data.questions)) {
       throw new Error("Formato de preguntas incorrecto");
@@ -74,24 +70,28 @@ async function loadQuestions() {
     userAnswers = {};
     currentQuestionIndex = 0;
 
+    app.innerHTML = `<div id="timer"></div><div id="quizContent"></div>`;
+
+    startTimer();
     renderQuestion();
   } catch (error) {
     console.error("Error cargando preguntas:", error);
-    application.innerHTML = `<p>Error cargando preguntas: ${error.message}</p>`;
+    app.innerHTML = `<p>Error cargando preguntas: ${error.message}</p>`;
   }
 }
 
 // Renderiza una pregunta según currentQuestionIndex
 function renderQuestion() {
   if (currentQuestionIndex >= questions.length) {
-    console.log("Todas las preguntas respondidas, mostrando resultados...");
+    stopTimer();
     showResults();
     return;
   }
 
   const question = questions[currentQuestionIndex];
+  const quizContent = document.getElementById("quizContent");
 
-  application.innerHTML = `
+  quizContent.innerHTML = `
     <h2>Pregunta ${currentQuestionIndex + 1} de ${questions.length}</h2>
     <p>${question.question}</p>
     <div id="answers"></div>
@@ -111,7 +111,6 @@ function renderQuestion() {
 
     btn.addEventListener("click", () => {
       userAnswers[currentQuestionIndex] = idx;
-
       [...answersDiv.children].forEach(b => b.classList.remove("selected"));
       btn.classList.add("selected");
     });
@@ -121,22 +120,9 @@ function renderQuestion() {
 
   document.getElementById("nextBtn").addEventListener("click", () => {
     if (userAnswers[currentQuestionIndex] === undefined) {
-      console.warn("Intento de avanzar sin seleccionar respuesta");
       alert("Debes seleccionar una respuesta antes de continuar.");
       return;
     }
-
-    const userAnswer = userAnswers[currentQuestionIndex];
-    const correctAnswerIndex = questions[currentQuestionIndex].correctIndex - 1;
-    const isCorrect = userAnswer === correctAnswerIndex;
-
-    if (isCorrect) {
-      console.log(`✅ Respuesta a la pregunta ${currentQuestionIndex + 1} es CORRECTA`);
-    } else {
-      console.log(`❌ Respuesta a la pregunta ${currentQuestionIndex + 1} es INCORRECTA`);
-    }
-
-    console.log(`Avanzando de pregunta ${currentQuestionIndex + 1}`);
     currentQuestionIndex++;
     renderQuestion();
   });
@@ -151,25 +137,47 @@ function showResults() {
     if (isCorrect) correctCount++;
   });
 
-  application.innerHTML = `
+  const seconds = stopTimer();
+
+  app.innerHTML = `
     <h2>Resultados</h2>
-    <p>Has acertado ${correctCount} de ${questions.length} preguntas.</p>
+    <p>Has acertado ${correctCount} de ${questions.length} preguntas en ${seconds} segundos.</p>
     <button id="restartBtn">Reiniciar</button>
     <button id="homeBtn">Inicio</button>
   `;
 
-  document.getElementById("restartBtn").addEventListener("click", () => {
-    console.log("Reiniciando quiz...");
-    loadQuestions();
-  });
-
-  document.getElementById("homeBtn").addEventListener("click", () => {
-    console.log("Volviendo al inicio...");
-    init();
-  });
+  document.getElementById("restartBtn").addEventListener("click", loadQuestions);
+  document.getElementById("homeBtn").addEventListener("click", init);
 }
 
-// Inicializa la aplicación cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', () => {
-  init();
-});
+// TIMER
+function startTimer() {
+  startTime = new Date();
+
+  const timerDiv = document.getElementById('timer');
+  timerDiv.textContent = "Tiempo: 00:00";
+
+  updateTimer();
+  timerInterval = setInterval(updateTimer, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  const endTime = new Date();
+  const timeDiff = endTime - startTime;
+  return Math.round(timeDiff / 1000);
+}
+
+function updateTimer() {
+  const now = new Date();
+  const timeDiff = now - startTime;
+  const seconds = Math.floor(timeDiff / 1000) % 60;
+  const minutes = Math.floor(timeDiff / (1000 * 60)) % 60;
+  const timerDiv = document.getElementById('timer');
+  if (timerDiv) {
+    timerDiv.textContent = `Tiempo: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+}
+
+// Inicializa la aplicación
+document.addEventListener('DOMContentLoaded', init);
