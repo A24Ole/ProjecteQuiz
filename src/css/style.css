@@ -1,0 +1,144 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #e9ecef;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  color: #212529;
+}
+
+/* Contenedor principal */
+.container {
+  background: #f1f3f5;
+  padding: 20px;
+  margin-top: 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  width: 500px;
+  max-width: 95%;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+.question-card {
+  margin: 15px 0;
+  font-size: 1.1em;
+  color: #2c3e50;
+}
+
+.answers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 15px 0;
+}
+
+/* Labels (respuestas) en azul */
+.answers label {
+  cursor: pointer;
+  background: #007bff;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 4px;
+  transition: background 0.2s;
+  margin-top: 5px;
+  display: block;
+}
+
+.answers label:hover {
+  background: #0056b3;
+}
+
+/* Botones */
+button {
+  margin: 4px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #007bff; /* Todos azules */
+  transition: background 0.2s, opacity 0.2s;
+}
+
+button:hover {
+  background-color: #0069d9;
+  opacity: 0.95;
+}
+
+/* Botones de cuestionario unificados */
+#startBtn,
+#prevBtn,
+#nextBtn,
+#restartBtn {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+#startBtn:hover,
+#prevBtn:hover,
+#nextBtn:hover,
+#restartBtn:hover {
+  background-color: #0056b3;
+}
+
+/* Botones CRUD diferenciados */
+button.create { background-color: #28a745; }
+button.update { background-color: #ffc107; color: #212529; }
+button.delete { background-color: #dc3545; }
+
+/* Resultados */
+#results {
+  margin-top: 15px;
+  padding: 10px;
+  background: #dee2e6;
+  border-radius: 4px;
+  color: #212529;
+}
+
+/* Formularios CRUD */
+form {
+  margin-bottom: 20px;
+  background: #f1f3f5;
+  padding: 15px;
+  border-radius: 6px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+/* Tablas CRUD */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px;
+  background: #f8f9fa;
+}
+
+th, td {
+  border: solid 1px #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background: #007bff;
+  color: white;
+}
+
+td {
+  background: #f1f3f5;
+}
+
+input[type="text"], input[type="number"] {
+  width: 100%;
+  padding: 6px;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
