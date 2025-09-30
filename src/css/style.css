@@ -108,6 +108,8 @@ button:hover, .answer-btn:hover {
   width: 48%;
   margin-top: 22px;
   margin-right: 2%;
+  align-items: center;
+  justify-content: center;
 }
 
 #restartBtn {

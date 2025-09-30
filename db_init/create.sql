@@ -33,25 +33,26 @@ CREATE TABLE questions (
 BEGIN;
 
 INSERT INTO questions (id, question, answer1, answer2, answer3, answer4, correct_answer) VALUES
-(1, 'img/bmw', 'BMW', 'Audi', 'Mercedes-Benz', 'Volkswagen', 1),
-(2, 'img/audi', 'Porsche', 'Audi', 'Ferrari', 'Mazda', 2),
-(3, 'img/mercedes', 'Peugeot', 'Toyota', 'Mercedes-Benz', 'Honda', 3),
-(4, 'img/volkswagen', 'Volkswagen', 'Nissan', 'Hyundai', 'Fiat', 1),
-(5, 'img/toyota', 'Lexus', 'Toyota', 'Mazda', 'Subaru', 2),
-(6, 'img/nissan', 'Nissan', 'Honda', 'Kia', 'Opel', 1),
-(7, 'img/honda', 'Honda', 'Hyundai', 'Suzuki', 'Chevrolet', 1),
-(8, 'img/ford', 'Ford', 'Fiat', 'Jeep', 'Dodge', 1),
-(9, 'img/chevrolet', 'Chevrolet', 'Toyota', 'Ford', 'Buick', 1),
-(10, 'img/fiat', 'Renault', 'Citroën', 'Fiat', 'Seat', 3),
-(11, 'img/seat', 'Seat', 'Skoda', 'Peugeot', 'Renault', 1),
-(12, 'img/renault', 'Dacia', 'Renault', 'Alfa Romeo', 'Fiat', 2),
-(13, 'img/peugeot', 'Citroën', 'Peugeot', 'Jaguar', 'Seat', 2),
-(14, 'img/skoda', 'Volkswagen', 'Seat', 'Škoda', 'Mini', 3),
-(15, 'img/jaguar', 'Jaguar', 'Porsche', 'Ferrari', 'Maserati', 1),
-(16, 'img/ferrari', 'Ferrari', 'Lamborghini', 'Maserati', 'Porsche', 1),
-(17, 'img/lamborghini', 'McLaren', 'Lamborghini', 'Bugatti', 'Ferrari', 2),
-(18, 'img/bugatti', 'Pagani', 'Bugatti', 'Koenigsegg', 'Lotus', 2),
-(19, 'img/porsche', 'Porsche', 'Jaguar', 'Lexus', 'Audi', 1),
-(20, 'img/mazda', 'Mazda', 'Honda', 'Hyundai', 'Toyota', 1);
+(1, 'img/bmw.png', 'BMW', 'Audi', 'Mercedes-Benz', 'Volkswagen', 1),
+(2, 'img/audi.png', 'Porsche', 'Audi', 'Ferrari', 'Mazda', 2),
+(3, 'img/mercedes.png', 'Peugeot', 'Toyota', 'Mercedes-Benz', 'Honda', 3),
+(4, 'img/volkswagen.png', 'Volkswagen', 'Nissan', 'Hyundai', 'Fiat', 1),
+(5, 'img/toyota.png', 'Lexus', 'Toyota', 'Mazda', 'Subaru', 2),
+(6, 'img/nissan.png', 'Nissan', 'Honda', 'Kia', 'Opel', 1),
+(7, 'img/honda.png', 'Honda', 'Hyundai', 'Suzuki', 'Chevrolet', 1),
+(8, 'img/ford.png', 'Ford', 'Fiat', 'Jeep', 'Dodge', 1),
+(9, 'img/chevrolet.png', 'Chevrolet', 'Toyota', 'Ford', 'Buick', 1),
+(10, 'img/fiat.png', 'Renault', 'Citroën', 'Fiat', 'Seat', 3),
+(11, 'img/seat.png', 'Seat', 'Skoda', 'Peugeot', 'Renault', 1),
+(12, 'img/renault.png', 'Dacia', 'Renault', 'Alfa Romeo', 'Fiat', 2),
+(13, 'img/peugeot.png', 'Citroën', 'Peugeot', 'Jaguar', 'Seat', 2),
+(14, 'img/skoda.png', 'Volkswagen', 'Seat', 'Škoda', 'Mini', 3),
+(15, 'img/jaguar.png', 'Jaguar', 'Porsche', 'Ferrari', 'Maserati', 1),
+(16, 'img/ferrari.png', 'Ferrari', 'Lamborghini', 'Maserati', 'Porsche', 1),
+(17, 'img/lamborghini.png', 'McLaren', 'Lamborghini', 'Bugatti', 'Ferrari', 2),
+(18, 'img/bugatti.png', 'Pagani', 'Bugatti', 'Koenigsegg', 'Lotus', 2),
+(19, 'img/porsche.png', 'Porsche', 'Jaguar', 'Lexus', 'Audi', 1),
+(20, 'img/mazda.png', 'Mazda', 'Honda', 'Hyundai', 'Toyota', 1);
 
 COMMIT;
+

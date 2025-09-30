@@ -59,7 +59,7 @@ function renderStart(name) {
 // Carga las preguntas desde backend
 async function loadQuestions() {
   try {
-    const resp = await fetch('http://a24oleproyat.daw.inspedralbes.cat/projecteProdProva/src/php/quiz.php?action=load');
+    const resp = await fetch('http://a24oleproyat.daw.inspedralbes.cat/src/php/quiz.php?action=load');
     const data = await resp.json();
 
     if (!data.questions || !Array.isArray(data.questions)) {

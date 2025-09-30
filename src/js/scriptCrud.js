@@ -2,7 +2,7 @@
   let editingId = null;
 
   async function loadQuestions() {
-    const res = await fetch('http://a24oleproyat.daw.inspedralbes.cat/projecteProdProva/src/php/crud.php');
+    const res = await fetch('http://a24oleproyat.daw.inspedralbes.cat/src/php/crud.php');
     const questions = await res.json();
 
     container.innerHTML = `
