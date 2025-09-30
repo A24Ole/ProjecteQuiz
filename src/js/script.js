@@ -1,86 +1,90 @@
-const app = document.getElementById("partida");
+  const app = document.getElementById("partida");
 
-let questions = [];
-let userAnswers = {};
-let currentQuestionIndex = 0;
-let startTime, timerInterval;
+  let questions = [];
+  let userAnswers = {};
+  let currentQuestionIndex = 0;
+  let startTime, timerInterval;
 
-// Inicializar la app
-function init() {
-  const savedName = localStorage.getItem('username');
-  if (savedName) {
-    renderStart(savedName);
-  } else {
-    showForm();
-  }
-}
-
-// Mostrar formulario para introducir nombre si no está guardado
-function showForm() {
-  app.innerHTML = `
-    <form id="nameForm">
-      <label for="nameInput">Introduce tu nombre:</label>
-      <input id="nameInput" name="name" type="text" required />
-      <button type="submit">Guardar</button>
-    </form>
-  `;
-
-  const form = document.getElementById('nameForm');
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const name = form.name.value.trim();
-    if (name) {
-      localStorage.setItem('username', name);
-      renderStart(name);
+  // Inicializar la app
+  function init() {
+    const savedName = localStorage.getItem('username');
+    if (savedName) {
+      renderStart(savedName);
+    } else {
+      showForm();
     }
-  });
-}
+  }
 
-// Pantalla inicial con saludo, botón para empezar y borrar nombre
+  // Mostrar formulario para introducir nombre si no está guardado
+  function showForm() {
+    app.innerHTML = `
+      <form id="nameForm">
+        <label for="nameInput">Introduce tu nombre:</label>
+        <input id="nameInput" name="name" type="text" required />
+        <button type="submit">Guardar</button>
+      </form>
+    `;
+
+    const form = document.getElementById('nameForm');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = form.name.value.trim();
+      if (name) {
+        localStorage.setItem('username', name);
+        renderStart(name);
+      }
+    });
+  }
+
+// Pantalla inicial creativa con animación
 function renderStart(name) {
   app.innerHTML = `
-    <h2>Hola, ${name}!</h2>
-    <h2>Bienvenido al Quiz</h2>
-    <p>Para comenzar el quiz, pulsa el botón "Comenzar".</p>
-    <button id="buttonStart">Comenzar</button>
-    <button id="clearNameBtn">Borrar nombre</button>
+    <div class="start-screen">
+      <h1 class="title">🎉 Bienvenido, ${name}! 🎉</h1>
+      <h2 class="subtitle">Prepárate para el DESAFÍO del Quiz</h2>
+      <p class="description">Pon a prueba tus conocimientos y compite contra el tiempo ⏳</p>
+      
+      <button id="buttonStart" class="start-btn">🚀 ¡Comenzar!</button>
+      <button id="clearNameBtn" class="secondary-btn">🗑️ Borrar nombre</button>
+    </div>
   `;
 
   document.getElementById("buttonStart").addEventListener("click", () => {
     loadQuestions();
   });
 
-  document.getElementById('clearNameBtn').addEventListener('click', () => {
-    localStorage.removeItem('username');
+  document.getElementById("clearNameBtn").addEventListener("click", () => {
+    localStorage.removeItem("username");
     showForm();
   });
 }
 
-// Carga las preguntas desde backend
-async function loadQuestions() {
-  try {
-    const resp = await fetch('http://a24oleproyat.daw.inspedralbes.cat/src/php/quiz.php?action=load');
-    const data = await resp.json();
 
-    if (!data.questions || !Array.isArray(data.questions)) {
-      throw new Error("Formato de preguntas incorrecto");
+  // Carga las preguntas desde backend
+  async function loadQuestions() {
+    try {
+      const resp = await fetch('http://a24oleproyat.daw.inspedralbes.cat/src/php/quiz.php?action=load');
+      const data = await resp.json();
+
+      if (!data.questions || !Array.isArray(data.questions)) {
+        throw new Error("Formato de preguntas incorrecto");
+      }
+
+      questions = data.questions;
+      userAnswers = {};
+      currentQuestionIndex = 0;
+
+      app.innerHTML = `<div id="timer"></div><div id="quizContent"></div>`;
+
+      startTimer();
+      renderQuestion();
+    } catch (error) {
+      console.error("Error cargando preguntas:", error);
+      app.innerHTML = `<p>Error cargando preguntas: ${error.message}</p>`;
     }
-
-    questions = data.questions;
-    userAnswers = {};
-    currentQuestionIndex = 0;
-
-    app.innerHTML = `<div id="timer"></div><div id="quizContent"></div>`;
-
-    startTimer();
-    renderQuestion();
-  } catch (error) {
-    console.error("Error cargando preguntas:", error);
-    app.innerHTML = `<p>Error cargando preguntas: ${error.message}</p>`;
   }
-}
 
-// Renderiza una pregunta según currentQuestionIndex
+// Renderiza una pregunta con estilo creativo
 function renderQuestion() {
   if (currentQuestionIndex >= questions.length) {
     stopTimer();
@@ -91,11 +95,21 @@ function renderQuestion() {
   const question = questions[currentQuestionIndex];
   const quizContent = document.getElementById("quizContent");
 
+  // Porcentaje para barra progreso
+  const progressPercent = Math.round(((currentQuestionIndex + 1) / questions.length) * 100);
+
   quizContent.innerHTML = `
-    <h2>Pregunta ${currentQuestionIndex + 1} de ${questions.length}</h2>
-    <p>${question.question}</p>
-    <div id="answers"></div>
-    <button id="nextBtn">${currentQuestionIndex === questions.length - 1 ? "Finalizar" : "Siguiente"}</button>
+    <div class="progress-bar">
+      <div class="progress" style="width:${progressPercent}%;"></div>
+    </div>
+    <div class="question-card">
+      <h2 class="question-title">❓ Pregunta ${currentQuestionIndex + 1} de ${questions.length}</h2>
+      <div class="question-image">
+        <img src="${question.imageUrl}" alt="Pregunta" />
+      </div>
+      <div id="answers" class="answers"></div>
+      <button id="nextBtn" class="next-btn">${currentQuestionIndex === questions.length - 1 ? "✅ Finalizar" : "➡️ Siguiente"}</button>
+    </div>
   `;
 
   const answersDiv = document.getElementById("answers");
@@ -128,7 +142,8 @@ function renderQuestion() {
   });
 }
 
-// Mostrar resultados finales
+
+// Mostrar resultados finales creativo
 function showResults() {
   let correctCount = 0;
   questions.forEach((q, i) => {
@@ -138,46 +153,91 @@ function showResults() {
   });
 
   const seconds = stopTimer();
+  const percentage = Math.round((correctCount / questions.length) * 100);
+
+  // Mensaje dinámico según la puntuación
+  let message = "";
+
+  if (percentage === 100) {
+    message = "🎉 ¡Perfecto! Eres un GENIO del Quiz 🎉";
+  } else if (percentage >= 70) {
+    message = "👏 ¡Muy bien! Casi lo bordas 👏";
+  } else if (percentage >= 40) {
+    message = "😅 No está mal, pero puedes mejorar 😅";
+  } else {
+    message = "💡 ¡Sigue practicando! La próxima lo lograrás 💡";
+  }
 
   app.innerHTML = `
-    <h2>Resultados</h2>
-    <p>Has acertado ${correctCount} de ${questions.length} preguntas en ${seconds} segundos.</p>
-    <button id="restartBtn">Reiniciar</button>
-    <button id="homeBtn">Inicio</button>
+    <div class="score-screen">
+      <h2 class="score-title">🏆 Resultados del Quiz 🏆</h2>
+      <p class="score-message">${message}</p>
+      <p class="score-result">Has acertado <span>${correctCount}</span> de ${questions.length} 
+        preguntas en <strong>${seconds}</strong> segundos.</p>
+      
+      <div class="score-actions">
+        <button id="restartBtn" class="score-btn replay">🔄 Reiniciar</button>
+        <button id="homeBtn" class="score-btn home">🏠 Inicio</button>
+      </div>
+    </div>
   `;
 
   document.getElementById("restartBtn").addEventListener("click", loadQuestions);
   document.getElementById("homeBtn").addEventListener("click", init);
 }
 
-// TIMER
-function startTimer() {
-  startTime = new Date();
 
-  const timerDiv = document.getElementById('timer');
-  timerDiv.textContent = "Tiempo: 00:00";
+  // TIMER
+  function startTimer() {
+    startTime = new Date();
 
-  updateTimer();
-  timerInterval = setInterval(updateTimer, 1000);
-}
+    const timerDiv = document.getElementById('timer');
+    timerDiv.textContent = "Tiempo: 00:00";
 
-function stopTimer() {
-  clearInterval(timerInterval);
-  const endTime = new Date();
-  const timeDiff = endTime - startTime;
-  return Math.round(timeDiff / 1000);
-}
-
-function updateTimer() {
-  const now = new Date();
-  const timeDiff = now - startTime;
-  const seconds = Math.floor(timeDiff / 1000) % 60;
-  const minutes = Math.floor(timeDiff / (1000 * 60)) % 60;
-  const timerDiv = document.getElementById('timer');
-  if (timerDiv) {
-    timerDiv.textContent = `Tiempo: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    updateTimer();
+    timerInterval = setInterval(updateTimer, 1000);
   }
+
+  function stopTimer() {
+    clearInterval(timerInterval);
+    const endTime = new Date();
+    const timeDiff = endTime - startTime;
+    return Math.round(timeDiff / 1000);
+  }
+
+  function updateTimer() {
+    const now = new Date();
+    const timeDiff = now - startTime;
+    const seconds = Math.floor(timeDiff / 1000) % 60;
+    const minutes = Math.floor(timeDiff / (1000 * 60)) % 60;
+    const timerDiv = document.getElementById('timer');
+    if (timerDiv) {
+      timerDiv.textContent = `Tiempo: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+  }
+
+  // Inicializa la aplicación
+  document.addEventListener('DOMContentLoaded', init);
+
+const toggleBtn = document.getElementById("theme-toggle");
+const body = document.body;
+
+// Cargar preferencia previa del usuario o del sistema
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) {
+  body.setAttribute("data-theme", savedTheme);
+  toggleBtn.textContent = savedTheme === "dark" ? "☀️" : "🌙";
+} else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+  body.setAttribute("data-theme", "dark");
+  toggleBtn.textContent = "☀️";
 }
 
-// Inicializa la aplicación
-document.addEventListener('DOMContentLoaded', init);
+// Alternar tema al hacer clic
+toggleBtn.addEventListener("click", () => {
+  const currentTheme = body.getAttribute("data-theme");
+  const newTheme = currentTheme === "dark" ? "light" : "dark";
+  body.setAttribute("data-theme", newTheme);
+  localStorage.setItem("theme", newTheme);
+  toggleBtn.textContent = newTheme === "dark" ? "☀️" : "🌙";
+});
+

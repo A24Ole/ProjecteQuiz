@@ -19,7 +19,7 @@ DROP TABLE IF EXISTS questions;
 
 CREATE TABLE questions (
     id INT PRIMARY KEY,
-    question VARCHAR(255),
+    imagen VARCHAR(500),
     answer1 VARCHAR(100),
     answer2 VARCHAR(100),
     answer3 VARCHAR(100),
@@ -32,7 +32,7 @@ CREATE TABLE questions (
 -- ======================================================
 BEGIN;
 
-INSERT INTO questions (id, question, answer1, answer2, answer3, answer4, correct_answer) VALUES
+INSERT INTO questions (id, imagen, answer1, answer2, answer3, answer4, correct_answer) VALUES
 (1, 'img/bmw.png', 'BMW', 'Audi', 'Mercedes-Benz', 'Volkswagen', 1),
 (2, 'img/audi.png', 'Porsche', 'Audi', 'Ferrari', 'Mazda', 2),
 (3, 'img/mercedes.png', 'Peugeot', 'Toyota', 'Mercedes-Benz', 'Honda', 3),

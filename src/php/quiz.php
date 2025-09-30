@@ -23,7 +23,8 @@
     if ($_SERVER['REQUEST_METHOD'] === "GET" && ($_GET['action'] ?? '') === "load") {
         $count = 10;  // número fijo de preguntas a obtener
 
-        $stmt = $pdo->prepare("SELECT * FROM questions ORDER BY RAND() LIMIT :count");
+        $stmt = $pdo->prepare("SELECT id, imagen AS imageUrl, answer1, answer2, answer3, answer4, correct_answer 
+                            FROM questions ORDER BY RAND() LIMIT :count");
         $stmt->bindValue(':count', $count, PDO::PARAM_INT);
         $stmt->execute();
         $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -32,7 +33,7 @@
             "questions" => array_map(function($q) {
                 return [
                     "id" => (int)$q["id"],
-                    "question" => $q["question"],
+                    "imageUrl" => $q["imageUrl"], // usamos el alias definido en el SELECT
                     "answers" => [$q["answer1"], $q["answer2"], $q["answer3"], $q["answer4"]],
                     "correctIndex" => (int)$q["correct_answer"],
                 ];
