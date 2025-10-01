@@ -18,12 +18,22 @@
   // Mostrar formulario para introducir nombre si no está guardado
   function showForm() {
     app.innerHTML = `
+    <div class="init-hero fade-in">
+      <h1 class="title">🎉 ¡Bienvenido a la Aventura! 🎉</h1>
+      <h2>Quiz de Marcas de Coches</h2>
+      <h3>¿Preparado para descubrir cuánto sabes del mundo automotriz?</h3>
       <form id="nameForm">
-        <label for="nameInput">Introduce tu nombre:</label>
-        <input id="nameInput" name="name" type="text" required />
-        <button type="submit">Guardar</button>
-      </form>
-    `;
+        <label for="nameInput"> ¿Cómo te llamas, piloto? </label>
+        <br><br>
+        <input id="nameInput" name="name" type="text" autocomplete="off" placeholder="Escribe tu nombre aquí..." required />
+        <br>
+        <button type="submit"> Guardar y Empezar 🏁 </button>
+      </form> <br><br>
+      <div class="init-footer">
+        <span>Recuerda: ¡cada respuesta cuenta en la carrera final!</span>
+      </div>
+    </div>
+  `;
 
     const form = document.getElementById('nameForm');
     form.addEventListener('submit', e => {
@@ -39,13 +49,15 @@
 // Pantalla inicial creativa con animación
 function renderStart(name) {
   app.innerHTML = `
-    <div class="start-screen">
+  <div class="start-screen container-card">
       <h1 class="title">🎉 Bienvenido, ${name}! 🎉</h1>
       <h2 class="subtitle">Prepárate para el DESAFÍO del Quiz</h2>
       <p class="description">Pon a prueba tus conocimientos y compite contra el tiempo ⏳</p>
       
-      <button id="buttonStart" class="start-btn">🚀 ¡Comenzar!</button>
-      <button id="clearNameBtn" class="secondary-btn">🗑️ Borrar nombre</button>
+      <div class="btn-group">
+        <button id="buttonStart" class="start-btn">🚀 ¡Comenzar!</button>
+        <button id="clearNameBtn" class="secondary-btn">🗑️ Borrar nombre</button>
+      </div>
     </div>
   `;
 
@@ -60,8 +72,8 @@ function renderStart(name) {
 }
 
 
-  // Carga las preguntas desde backend
-  async function loadQuestions() {
+// Carga las preguntas desde backend
+async function loadQuestions() {
     try {
       const resp = await fetch('http://a24oleproyat.daw.inspedralbes.cat/src/php/quiz.php?action=load');
       const data = await resp.json();
@@ -82,7 +94,7 @@ function renderStart(name) {
       console.error("Error cargando preguntas:", error);
       app.innerHTML = `<p>Error cargando preguntas: ${error.message}</p>`;
     }
-  }
+}
 
 // Renderiza una pregunta con estilo creativo
 function renderQuestion() {
@@ -95,19 +107,18 @@ function renderQuestion() {
   const question = questions[currentQuestionIndex];
   const quizContent = document.getElementById("quizContent");
 
-  // Porcentaje para barra progreso
   const progressPercent = Math.round(((currentQuestionIndex + 1) / questions.length) * 100);
 
   quizContent.innerHTML = `
     <div class="progress-bar">
       <div class="progress" style="width:${progressPercent}%;"></div>
     </div>
-    <div class="question-card">
+    <div class="question-card container-card">
       <h2 class="question-title">❓ Pregunta ${currentQuestionIndex + 1} de ${questions.length}</h2>
       <div class="question-image">
         <img src="${question.imageUrl}" alt="Pregunta" />
       </div>
-      <div id="answers" class="answers"></div>
+      <div id="answers" class="answers btn-group"></div>
       <button id="nextBtn" class="next-btn">${currentQuestionIndex === questions.length - 1 ? "✅ Finalizar" : "➡️ Siguiente"}</button>
     </div>
   `;
@@ -142,7 +153,6 @@ function renderQuestion() {
   });
 }
 
-
 // Mostrar resultados finales creativo
 function showResults() {
   let correctCount = 0;
@@ -155,7 +165,6 @@ function showResults() {
   const seconds = stopTimer();
   const percentage = Math.round((correctCount / questions.length) * 100);
 
-  // Mensaje dinámico según la puntuación
   let message = "";
 
   if (percentage === 100) {
@@ -169,13 +178,13 @@ function showResults() {
   }
 
   app.innerHTML = `
-    <div class="score-screen">
+    <div class="score-screen container-card">
       <h2 class="score-title">🏆 Resultados del Quiz 🏆</h2>
       <p class="score-message">${message}</p>
       <p class="score-result">Has acertado <span>${correctCount}</span> de ${questions.length} 
         preguntas en <strong>${seconds}</strong> segundos.</p>
       
-      <div class="score-actions">
+      <div class="score-actions btn-group">
         <button id="restartBtn" class="score-btn replay">🔄 Reiniciar</button>
         <button id="homeBtn" class="score-btn home">🏠 Inicio</button>
       </div>
@@ -186,9 +195,8 @@ function showResults() {
   document.getElementById("homeBtn").addEventListener("click", init);
 }
 
-
   // TIMER
-  function startTimer() {
+function startTimer() {
     startTime = new Date();
 
     const timerDiv = document.getElementById('timer');
@@ -196,16 +204,16 @@ function showResults() {
 
     updateTimer();
     timerInterval = setInterval(updateTimer, 1000);
-  }
+}
 
-  function stopTimer() {
+function stopTimer() {
     clearInterval(timerInterval);
     const endTime = new Date();
     const timeDiff = endTime - startTime;
     return Math.round(timeDiff / 1000);
-  }
+}
 
-  function updateTimer() {
+function updateTimer() {
     const now = new Date();
     const timeDiff = now - startTime;
     const seconds = Math.floor(timeDiff / 1000) % 60;
@@ -214,14 +222,11 @@ function showResults() {
     if (timerDiv) {
       timerDiv.textContent = `Tiempo: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
-  }
-
-  // Inicializa la aplicación
-  document.addEventListener('DOMContentLoaded', init);
+}
 
 const toggleBtn = document.getElementById("theme-toggle");
 const body = document.body;
-
+  
 // Cargar preferencia previa del usuario o del sistema
 const savedTheme = localStorage.getItem("theme");
 if (savedTheme) {
@@ -241,3 +246,5 @@ toggleBtn.addEventListener("click", () => {
   toggleBtn.textContent = newTheme === "dark" ? "☀️" : "🌙";
 });
 
+// Inicializa la aplicación
+document.addEventListener('DOMContentLoaded', init);

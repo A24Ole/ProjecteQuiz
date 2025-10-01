@@ -30,6 +30,7 @@
   --color-shadow: rgba(0,0,0,0.1);
 }
 
+
 /* --- DARK MODE --- */
 [data-theme="dark"] {
   --color-bg: #1e1e2f;
@@ -59,6 +60,7 @@
   --color-shadow: rgba(0,0,0,0.4);
 }
 
+
 /* Ajustes base */
 body {
   font-family: 'Segoe UI', Arial, sans-serif;
@@ -67,52 +69,126 @@ body {
   padding: 0;
   display: flex;
   justify-content: center;
+  text-align: center;
   min-height: 100vh;
   color: var(--color-text);
   transition: background 0.4s, color 0.3s;
 }
 
+
+/* Contenedor principal responsivo */
 #partida {
-  width: 90%;
-  max-width: 650px;
-  margin: 20px auto;
+  position: fixed;
   background: var(--color-surface);
-  padding: 20px;
-  border-radius: 12px;
+  width: 95vw;
+  max-width: 1000px;
+  margin: auto;
+  padding: 2% 3%;
+  border-radius: 16px;
   box-shadow: 0 6px 18px var(--color-shadow);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 80vh;
-  transition: background 0.4s, box-shadow 0.3s;
+  justify-content: center;   /* 🔹 centrado vertical */
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
-/* Inputs */
-input[type="text"] {
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid var(--color-border);
-  font-size: 16px;
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeInDown {
+  from {opacity: 0; transform: translateY(-20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+@keyframes fadeInUp {
+  from {opacity: 0; transform: translateY(20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+
+/* Estilos comunes para títulos */
+.title, .subtitle {
+  margin-bottom: 10px;
+  animation-timing-function: ease;
+}
+
+.title {
+  font-size: 1.5em;
+  animation-name: fadeInDown;
+  animation-duration: 1s;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 1.1em;
+  margin-bottom: 20px;
+  font-weight: 400;
+  animation-name: fadeInUp;
+  animation-duration: 1.2s;
+}
+
+
+/* Formulario */
+form, #nameForm {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 15px;
   width: 100%;
-  background: var(--color-surface-alt);
-  color: var(--color-text);
-  transition: border 0.3s, background 0.3s;
+  box-shadow: none;
+  display: block;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
-input[type="text"]:focus {
+label, #nameForm label {
+  font-size: 1.14em;
+  display: block;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+input[type="text"], #nameInput {
+  padding: 8px 12px;
+  border: 1px solid var(--color-primary-dark);
+  border-radius: 10px;
+  font-size: 0.9em;
+  width: 80%;
+  margin-bottom: 16px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+input[type="text"]:focus, #nameInput:focus {
   border-color: var(--color-primary);
+  box-shadow: 0 0 10px var(--color-primary);
+  transform: scale(1.05);
   outline: none;
 }
+
 
 /* Botones */
 button, .answer-btn, .score-btn {
   cursor: pointer;
-  padding: 12px 16px;
-  border-radius: 10px;
+  padding: 12px 18px;
+  margin: 8px 0;
+  border-radius: 12px;
   border: none;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
-  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s, color 0.3s;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.3s, color 0.3s;
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 button {
@@ -123,15 +199,15 @@ button {
 button:hover {
   background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary-darker));
   transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
 }
+
 
 /* Respuestas */
 .answer-btn {
-  width: 100%;
   background: var(--color-surface-alt);
   border: 1px solid var(--color-border-light);
   color: var(--color-text);
-  margin: 5px 0;
 }
 
 .answer-btn:hover {
@@ -147,6 +223,7 @@ button:hover {
   box-shadow: 0 4px 12px rgba(74,144,226,0.5);
 }
 
+
 /* Pantalla de inicio */
 .start-btn {
   background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark), var(--color-accent));
@@ -157,6 +234,7 @@ button:hover {
   transform: scale(1.08);
   box-shadow: 0 8px 20px rgba(255, 118, 150, 0.6);
 }
+
 
 /* Botón siguiente */
 .next-btn {
@@ -169,12 +247,26 @@ button:hover {
   box-shadow: 0 6px 15px rgba(255,196,30,0.4);
 }
 
+
 /* Barra de progreso */
-.progress {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  transition: width 0.5s ease;
+.progress-bar {
+  background: var(--color-surface-alt);
+  border-radius: 10px;
+  height: 12px;
+  width: 100%;
+  margin-bottom: 20px;
+  overflow: hidden;
 }
 
+.progress {
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  height: 100%;
+  transition: width 0.4s ease;
+  border-radius: 10px;
+}
+
+
+/* Modo tema */
 #theme-toggle {
   position: fixed;
   top: 15px;
@@ -199,18 +291,86 @@ button:hover {
   transform: scale(1.1);
 }
 
-/* Imágenes responsive y centradas */
+
+/* Imágenes con tamaño fijo y siempre completas */
 img {
-  display: block;
-  max-width: 100%;    /* nunca supera el ancho del contenedor */
-  height: auto;       /* mantiene la proporción */
-  margin: 0 auto;     /* centra horizontalmente */
-  border-radius: 8px; /* opcional: armoniza con el diseño */
+  margin: 0 auto;
+  border-radius: 8px;
+  object-fit: contain; /* Siempre contiene la imagen completa */
 }
 
-/* Ajuste extra en móviles */
+.question-image {
+  width: 100%;
+  max-width: 400px;
+  
+  margin: 0 auto 15px;
+}
+
+.question-image img {
+  max-height: 150px; /* menos altura */
+  width: 100%;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+
+/* Tarjetas */
+.question-card {
+  padding: 10px;
+  border-radius: 12px;
+  background: var(--color-surface-alt);
+  box-shadow: 0 4px 12px var(--color-shadow);
+  margin: auto;
+  width: 100%;
+  max-width: 600px;
+  max-height: unset; /* quitamos restricción */
+}
+
+.question-title {
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+
+/* Pantalla de resultados */
+.score-screen {
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--color-surface-alt);
+  max-width: 600px;
+  margin: auto;
+  box-shadow: 0 6px 15px var(--color-shadow);
+}
+.score-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+
+/* ---------- MEDIA QUERIES ---------- */
 @media (max-width: 600px) {
-  img {
-    max-width: 300px; /* límite máximo en pantallas pequeñas */
+  body { font-size: 14px; }
+  #partida { padding: 15px; }
+  button, .answer-btn, .score-btn {
+    font-size: 0.9rem;
+    padding: 10px 14px;
+  }
+  .question-image { max-width: 300px; }
+}
+
+@media (min-width: 600px) and (max-width: 900px) {
+  #partida { padding: 30px; }
+  .question-title { font-size: 1.3rem; }
+}
+
+@media (min-width: 900px) {
+  .title { font-size: 2.2rem; }
+  .subtitle { font-size: 1.5rem; }
+  .question-title { font-size: 1.4rem; }
+  button, .answer-btn, .score-btn {
+    font-size: 1.05rem;
+    padding: 14px 20px;
   }
 }
