@@ -18,7 +18,7 @@ USE Proyecto0;
 DROP TABLE IF EXISTS questions;
 
 CREATE TABLE questions (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     imagen VARCHAR(500),
     answer1 VARCHAR(100),
     answer2 VARCHAR(100),
