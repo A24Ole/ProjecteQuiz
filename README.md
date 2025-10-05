@@ -33,11 +33,4 @@ Aplicació web per a fer un quiz de marques de cotxes i administrar les pregunte
 
 ---
 
-## Instal·lació
-
-- Puja els arxius a un servidor amb PHP i MySQL.
-- Configura la base de dades i les credencials.
-- Obre index.html per jugar i crud.html per administrar preguntes.
-
----
 
